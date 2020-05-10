@@ -12,12 +12,10 @@ export default class Favorites extends Component {
   render() {
     return (
       <AppContext.Consumer>
-        {({
-          pricesDataArray,
-          favoritesCoinArrayNames,
-          fetchingPrices,
-          removeFavorites,
-        }) => {
+        {({ pricesDataArray, removeFavorites }) => {
+          let localStorageFavorites =
+            JSON.parse(localStorage.getItem("favoritesCoins")) || [];
+
           return (
             <div className="favorites">
               <div className="favorites-title">
@@ -25,33 +23,24 @@ export default class Favorites extends Component {
               </div>
 
               <div className="favorites-info">
-                {pricesDataArray.length === 0 ? (
-                  <h4>You don't have any favorites, please go select some</h4>
-                ) : fetchingPrices ? (
-                  <Spinner />
-                ) : (
-                  pricesDataArray.map((coin, index) => {
+                {localStorageFavorites.length === 0 ? (
+                  <h4>You don't have any favorites, please go select some.</h4>
+                ) : localStorageFavorites.length > 1 &&
+                  pricesDataArray.length > 1 ? (
+                  pricesDataArray.map((coin) => {
                     return (
                       <div
                         className="favorites__container"
-                        key={
-                          coin[favoritesCoinArrayNames[index]].USD.FROMSYMBOL
-                        }
+                        key={coin[Object.keys(coin)].USD.FROMSYMBOL}
                         onClick={() => removeFavorites(coin)}
                       >
                         <div className="favorites__single">
-                          <span>
-                            {
-                              coin[favoritesCoinArrayNames[index]].USD
-                                .FROMSYMBOL
-                            }
-                          </span>
+                          <span>{coin[Object.keys(coin)].USD.FROMSYMBOL}</span>
                           <span
                             className={classnames(
                               `${
                                 this.numberFormat(
-                                  coin[favoritesCoinArrayNames[index]].USD
-                                    .CHANGEPCT24HOUR
+                                  coin[Object.keys(coin)].USD.CHANGEPCT24HOUR
                                 ) < 0
                                   ? "favorites__price--red"
                                   : "favorites__price--green"
@@ -59,18 +48,17 @@ export default class Favorites extends Component {
                             )}
                           >
                             {this.numberFormat(
-                              coin[favoritesCoinArrayNames[index]].USD
-                                .CHANGEPCT24HOUR
+                              coin[Object.keys(coin)].USD.CHANGEPCT24HOUR
                             )}
                             %
                           </span>
                         </div>
-                        <h2>
-                          ${coin[favoritesCoinArrayNames[index]].USD.PRICE}
-                        </h2>
+                        <h2>${coin[Object.keys(coin)].USD.PRICE}</h2>
                       </div>
                     );
                   })
+                ) : (
+                  <Spinner />
                 )}
               </div>
             </div>

@@ -20,7 +20,7 @@ export default class Context extends Component {
       favorites: [],
       favoritesCoinArrayNames: [],
       pricesDataArray: [],
-      fetchingPrices: false,
+      undefinedDataArray: [],
     };
   }
 
@@ -36,16 +36,14 @@ export default class Context extends Component {
     );
 
     if (getCoinsFromLocalStorage && getCoinsFromLocalStorage.length >= 1) {
-      this.setState({
-        fetchingPrices: true,
-      });
       try {
         let favoritesNameArray = getCoinsFromLocalStorage.map(
           (coin) => coin.Name
         );
 
         let resultsJson = await fetch(
-          "https://backend-coins.herokuapp.com/api/coins/get-prices",
+          //https://sleepy-perlman-0d377e.netlify.app/
+          "http://localhost:3001/api/coins/get-prices",
           {
             method: "post",
             headers: {
@@ -59,7 +57,7 @@ export default class Context extends Component {
 
         this.setState({
           pricesDataArray: results.priceData,
-          fetchingPrices: false,
+          undefinedDataArray: results.undefinedData,
         });
       } catch (e) {
         toast.warn("Something went wrong try again!", {
@@ -91,7 +89,7 @@ export default class Context extends Component {
   getInitialCoins = async () => {
     try {
       let results = await fetch(
-        "https://backend-coins.herokuapp.com/api/coins/get-all-coins"
+        "http://localhost:3001/api/coins/get-all-coins"
       );
       let fetchedCoins = await results.json();
       let data = fetchedCoins.coinList.Data;

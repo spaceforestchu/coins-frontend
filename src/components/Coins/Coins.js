@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { AppContext } from "../Context/Context";
-import _ from "lodash";
 import "./Coins.css";
 
 export default class Coins extends Component {
