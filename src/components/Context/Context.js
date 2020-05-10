@@ -42,7 +42,7 @@ export default class Context extends Component {
         );
 
         let resultsJson = await fetch(
-          "https://sleepy-perlman-0d377e.netlify.app/api/coins/get-prices",
+          "https://backend-coins.herokuapp.com/api/coins/get-prices",
           {
             method: "post",
             headers: {
@@ -88,7 +88,7 @@ export default class Context extends Component {
   getInitialCoins = async () => {
     try {
       let results = await fetch(
-        "https://sleepy-perlman-0d377e.netlify.app/api/coins/get-all-coins"
+        "https://backend-coins.herokuapp.com/api/coins/get-all-coins"
       );
       let fetchedCoins = await results.json();
       let data = fetchedCoins.coinList.Data;
